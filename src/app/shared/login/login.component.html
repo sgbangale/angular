@@ -1,0 +1,18 @@
+<div class="form_wrapper">
+  <h3>Login</h3>
+  <form  [formGroup]= "formGroup" (ngSubmit) ="onSubmit()" novalidate >
+    <div class="element-wrapper">
+      <input formControlName="user_name" type="text" name="user_name">
+        <mat-error *ngIf="!formGroup.controls['user_name'].valid&&formGroup.controls['user_name'].dirty">User Name is required</mat-error>
+      <label for="user_name">User Name</label>
+    </div>
+    <div class="element-wrapper">
+      <input type="password" formControlName="password" name="password">
+      <mat-error *ngIf="!formGroup.controls['password'].valid&&formGroup.controls['password'].dirty">Password is required</mat-error>
+      <label for="password">Password</label>
+    </div>
+    <div class="element-wrapper">
+      <input type="submit" value="Login" [disabled]="!formGroup.valid" >
+    </div>
+  </form>
+</div>

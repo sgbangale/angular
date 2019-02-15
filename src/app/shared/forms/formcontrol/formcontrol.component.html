@@ -1,0 +1,6 @@
+<div class="element-wrapper">
+  <input formControlName="email" type="text" name="email">
+    <!-- <i class="material-icons md-tooltip--right"  *ngIf="!formGroup.controls['email'].valid&&formGroup.controls['email'].dirty">favorite</i> -->
+    <mat-error *ngIf="!formGroup.controls['email'].valid&&formGroup.controls['email'].dirty">Email is required</mat-error>
+  <label for="email">Email</label>
+</div>
