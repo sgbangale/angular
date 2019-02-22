@@ -12,3 +12,13 @@ export class Token {
   iat: Number;
   exp: Number;
 }
+
+
+export class ViewRequest 
+{
+  filters:any;
+  sortFields:string;
+  removeColumns:string;
+  first:Number;
+  rows:Number;
+}

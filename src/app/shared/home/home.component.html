@@ -1,11 +1,8 @@
 <app-primary-menu (menuToggle) = "drawer.toggle()"></app-primary-menu>
 <mat-drawer-container class="example-container">
-  <mat-drawer #drawer class="example-sidenav" mode="over">
-    <button mat-menu-item>Baikal oilfish</button>
-    <button mat-menu-item>Bala shark</button>
-    <button mat-menu-item>Ballan wrasse</button>
-    <button mat-menu-item>Bamboo shark</button>
-    <button mat-menu-item>Banded killifish</button>
+  <mat-drawer #drawer class="example-sidenav" mode="side" style=" width: 137px">
+    <button *ngFor="let item of operations.AccessibleEntities;" mat-menu-item (click)="navigate(item)">{{item}}</button>
+    <button mat-menu-item (click)="navigate('item')">item</button>
   </mat-drawer>
 
   <div class="example-sidenav-content">

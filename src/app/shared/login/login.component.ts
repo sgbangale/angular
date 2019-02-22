@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     this.service.token(request).subscribe(data => {
       if(data.body.isSucess)
       {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home/dashboard']);
       }
       else{
         this.snackBar.open(data.body.message, "OK", {

@@ -56,6 +56,9 @@ import { ApiInterceptor } from './shared/ApiInterceptor';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { SignOutComponent } from './shared/sign-out/sign-out.component';
 import { PrimaryMenuComponent } from './shared/primary-menu/primary-menu.component';
+import { EntityListComponent } from './entity/entity-list/entity-list.component';
+import { DashboardComponent } from './shared/dashboard/dashboard.component';
+import { SecondaryMenuComponent } from './shared/secondary-menu/secondary-menu.component';
 
 
 
@@ -73,8 +76,15 @@ export const httpInterceptorProviders = [
     NotFoundComponent,
     SignOutComponent,
     PrimaryMenuComponent,
+    EntityListComponent,
+    DashboardComponent,
+    SecondaryMenuComponent,
     
   ],
+  providers: [
+    httpInterceptorProviders
+  ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,    
     BrowserAnimationsModule,
@@ -119,10 +129,6 @@ export const httpInterceptorProviders = [
   MatTooltipModule,
   MatTreeModule,
 
-  ],
-  providers: [
-    httpInterceptorProviders
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
 export class AppModule { }

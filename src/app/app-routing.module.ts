@@ -14,17 +14,29 @@ import {
 import { AuthGuard } from './shared/auth.guard';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { SignOutComponent } from './shared/sign-out/sign-out.component';
+import { EntityListComponent } from './entity/entity-list/entity-list.component';
+import { DashboardComponent } from './shared/dashboard/dashboard.component';
 
 
 const routes: Routes = [{
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: '/home',
     pathMatch: 'full'
   },
   {
     component: HomeComponent,
-    path: 'dashboard',
-    canActivate : [AuthGuard]
+    path: 'home',
+    canActivate : [AuthGuard],
+    children:[
+      { path:'',component:DashboardComponent},
+      { path:'dashboard',component:DashboardComponent},
+      { path:'entities/:entity_code',component:EntityListComponent, 
+      children:[
+
+      ]},
+      { path:'not-found',component:NotFoundComponent},
+      { path:'**',component:NotFoundComponent},
+    ]
   },
   {
     component: LoginComponent,
