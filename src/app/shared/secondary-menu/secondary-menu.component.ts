@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-secondary-menu',
@@ -6,15 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./secondary-menu.component.css']
 })
 export class SecondaryMenuComponent implements OnInit {
-
   operations ={};
-  @Input("entity_code") entity_code :string;
-  constructor() { }
-
+  constructor(private router : ActivatedRoute) { }
   ngOnInit() {
-
     let entityOperation = JSON.parse(localStorage.getItem('navigation'));    
-    this.operations = entityOperation['AccessibleOperations'][this.entity_code];
+    this.router.params.subscribe((parmas) => {
+      this.operations = entityOperation['AccessibleOperations'][parmas['entity_code']];
+    });
   }
 
 }

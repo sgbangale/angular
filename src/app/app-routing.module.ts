@@ -30,10 +30,7 @@ const routes: Routes = [{
     children:[
       { path:'',component:DashboardComponent},
       { path:'dashboard',component:DashboardComponent},
-      { path:'entities/:entity_code',component:EntityListComponent, 
-      children:[
-
-      ]},
+      { path:'entities/:entity_code',component:EntityListComponent},
       { path:'not-found',component:NotFoundComponent},
       { path:'**',component:NotFoundComponent},
     ]

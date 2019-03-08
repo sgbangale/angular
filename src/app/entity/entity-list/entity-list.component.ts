@@ -1,65 +1,135 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'}
-//   {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-//   {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-//   {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-//   {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-//   {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-//   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
- ];
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit
+} from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { merge, of } from "rxjs";
+import { RequestService } from "src/app/services/request.service";
+import { ViewRequest } from "src/models/login";
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from "@angular/material";
+import {
+  startWith,
+  switchMap,
+  map,
+  catchError,
+  debounceTime,
+  distinctUntilChanged
+} from "rxjs/operators";
+import { SelectionModel } from "@angular/cdk/collections";
+import { FormControl } from "@angular/forms";
+import { EntityDetailsComponent } from '../entity-details/entity-details.component';
 
 @Component({
-  selector: 'app-entity-list',
-  templateUrl: './entity-list.component.html',
-  styleUrls: ['./entity-list.component.css']
+  selector: "app-entity-list",
+  templateUrl: "./entity-list.component.html",
+  styleUrls: ["./entity-list.component.css"]
 })
-export class EntityListComponent implements OnInit, OnDestroy {
-  ngOnDestroy(): void {
-    this.paramsSubscription.unsubscribe();
-  }
+export class EntityListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  entity_code : string;
-  paramsSubscription : Subscription;
-  constructor(private router:ActivatedRoute, private navigate : Router) { }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  
+  displayedColumns: string[];
+  actualColumns: string[];
+  selectedFilter = "";
+  resultsLength = 0;
+  selection = new SelectionModel<any>(true, []);
+  dataSource: MatTableDataSource<any>;
+  entity_code: string;
+  filter: FormControl = new FormControl();
+  
+  constructor(
+    private router: ActivatedRoute,
+    private navigate: Router,
+    private request: RequestService,
+    public dialog: MatDialog
+  ) {}
 
-  
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-  
   ngOnInit() {
-    let operations = JSON.parse(localStorage.getItem('navigation'));
-    this.paramsSubscription = this.router.params.subscribe((parmas) => {
-      
-      if(operations.AccessibleEntities.indexOf(parmas['entity_code']) == -1){
-        this.navigate.navigate(['/home/not-found']);
+    let operations = JSON.parse(localStorage.getItem("navigation"));
+    this.router.params.subscribe(parmas => {
+      if (operations.AccessibleEntities.indexOf(parmas["entity_code"]) == -1) {
+        this.navigate.navigate(["/home/not-found"]);
       }
-      else  {
-        this.entity_code = parmas['entity_code'];
-      }
+      this.entity_code = parmas["entity_code"];
     });
   }
 
+  ngAfterViewInit(): void {
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.filter.valueChanges.subscribe(() => (this.paginator.pageIndex = 0));
+
+    merge(this.sort.sortChange, this.paginator.page, this.router.params)
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        startWith({}),
+        switchMap(() => {
+          let req: ViewRequest = {
+            filters: {},
+            sortFields: `${this.sort.direction === "desc" ? "-" : ""}${
+              this.sort.active
+            }`,
+            removeColumns: "",
+            first: this.paginator.pageIndex,
+            rows: 10
+          };
+
+          return this.request.view(req, this.entity_code + "__view");
+        }),
+        map(data => {
+          if (data.body.isSucess) {
+            this.actualColumns = Object.keys(data.body.body.data[0]); // this must come from server to show the columns to the user grid.
+            this.displayedColumns =  [ ...this.actualColumns,'Operations'];
+            console.log(this.displayedColumns);
+            this.resultsLength = data.body.body.count;
+          }
+          return data.body.body.data;
+        }),
+        catchError(() => {
+          return of([]);
+        })
+      )
+      .subscribe(data => (this.dataSource = new MatTableDataSource<any>(data)));
+  }
+
+  ngOnDestroy(): void {
+    this.sort.sortChange.unsubscribe();
+    this.paginator.page.unsubscribe();
+  }
+
+  details(obj:any)
+  {
+    const dialogRef = this.dialog.open(EntityDetailsComponent, {    
+      disableClose : true,
+      data: obj
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+    });
+  
+    console.log(obj)
+  }
+  
+  // applyFilter(filterValue: string) {
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  // }
+  
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
 }

@@ -59,6 +59,7 @@ import { PrimaryMenuComponent } from './shared/primary-menu/primary-menu.compone
 import { EntityListComponent } from './entity/entity-list/entity-list.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { SecondaryMenuComponent } from './shared/secondary-menu/secondary-menu.component';
+import { EntityDetailsComponent } from './entity/entity-details/entity-details.component';
 
 
 
@@ -79,6 +80,7 @@ export const httpInterceptorProviders = [
     EntityListComponent,
     DashboardComponent,
     SecondaryMenuComponent,
+    EntityDetailsComponent,
     
   ],
   providers: [
