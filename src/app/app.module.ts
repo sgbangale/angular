@@ -80,11 +80,15 @@ export const httpInterceptorProviders = [
     EntityListComponent,
     DashboardComponent,
     SecondaryMenuComponent,
-    EntityDetailsComponent,
+    EntityDetailsComponent
+    
     
   ],
   providers: [
     httpInterceptorProviders
+  ],
+  entryComponents:[
+    EntityDetailsComponent
   ],
   bootstrap: [AppComponent],
   imports: [

@@ -21,6 +21,7 @@ import {
 import { SelectionModel } from "@angular/cdk/collections";
 import { FormControl } from "@angular/forms";
 import { EntityDetailsComponent } from '../entity-details/entity-details.component';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: "app-entity-list",
@@ -45,13 +46,14 @@ export class EntityListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: ActivatedRoute,
     private navigate: Router,
     private request: RequestService,
+    private accountService : AccountService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    let operations = JSON.parse(localStorage.getItem("navigation"));
+    
     this.router.params.subscribe(parmas => {
-      if (operations.AccessibleEntities.indexOf(parmas["entity_code"]) == -1) {
+      if ( this.accountService.getSessionValues('accessible_entities').indexOf(parmas["entity_code"]) == -1) {
         this.navigate.navigate(["/home/not-found"]);
       }
       this.entity_code = parmas["entity_code"];
@@ -84,7 +86,6 @@ export class EntityListComponent implements OnInit, OnDestroy, AfterViewInit {
           if (data.body.isSucess) {
             this.actualColumns = Object.keys(data.body.body.data[0]); // this must come from server to show the columns to the user grid.
             this.displayedColumns =  [ ...this.actualColumns,'Operations'];
-            console.log(this.displayedColumns);
             this.resultsLength = data.body.body.count;
           }
           return data.body.body.data;
@@ -109,11 +110,7 @@ export class EntityListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
     });
-  
-    console.log(obj)
   }
   
   // applyFilter(filterValue: string) {

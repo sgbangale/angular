@@ -40,6 +40,21 @@ export class AccountService {
     })
   };
 
+  getSessionValues(sessionKey:string)
+  {
+    let sessionValue =localStorage.getItem(sessionKey);
+    if(sessionKey === 'accessible_operations' || sessionKey === 'accessible_entities')
+    { 
+      return JSON.parse(sessionValue);
+      
+    }
+    else
+    {
+      return sessionValue;
+    }
+    
+  }
+
   token(tokenReq: LoginRequest): Observable < any > {
     let req = new HttpRequest < LoginRequest > (
       'POST',

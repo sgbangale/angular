@@ -4,10 +4,11 @@ import { Observable, throwError } from "rxjs";
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { AccountService } from '../services/account.service';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
-  constructor(private router:Router,private snackBar:MatSnackBar){}
+  constructor(private router:Router,private snackBar:MatSnackBar,private accountService : AccountService){}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
 
@@ -15,7 +16,7 @@ export class ApiInterceptor implements HttpInterceptor {
     if(req.url.indexOf('/account') == -1)
     req = req.clone({
       setHeaders: {
-        'token':  localStorage.getItem('token')
+        'token':  this.accountService.getSessionValues('token')
       }
     });
      return next.handle(req).pipe(

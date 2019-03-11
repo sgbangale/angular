@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RequestService } from 'src/app/services/request.service';
-import { ViewRequest } from 'src/models/login';
 import * as _ from 'lodash';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-home',
@@ -11,13 +11,13 @@ import * as _ from 'lodash';
 })
 export class HomeComponent implements OnInit {
 
-  operations ={};
-  constructor(private router:Router,private reqService: RequestService) {
-    this.operations = JSON.parse(localStorage.getItem('navigation'));
+  accessibleEntities =[];
+  constructor(private router:Router,private reqService: RequestService, private accountService : AccountService) {
+    this.accessibleEntities = this.accountService.getSessionValues('accessible_entities') ;
    }
   toggle(e)
   {
-    console.log(e);
+    
   }
   ngOnInit() {
      

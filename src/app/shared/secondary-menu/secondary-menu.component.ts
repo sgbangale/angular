@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-secondary-menu',
@@ -9,11 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SecondaryMenuComponent implements OnInit {
   operations ={};
-  constructor(private router : ActivatedRoute) { }
+  constructor(private router : ActivatedRoute, private accountService : AccountService) { }
   ngOnInit() {
-    let entityOperation = JSON.parse(localStorage.getItem('navigation'));    
+    let entityOperation =    this.accountService.getSessionValues('accessible_operations')
     this.router.params.subscribe((parmas) => {
-      this.operations = entityOperation['AccessibleOperations'][parmas['entity_code']];
+      this.operations = entityOperation[parmas['entity_code']];
     });
   }
 

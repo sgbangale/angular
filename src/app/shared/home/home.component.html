@@ -1,7 +1,7 @@
 <app-primary-menu (menuToggle) = "drawer.toggle()"></app-primary-menu>
 <mat-drawer-container class="example-container">
   <mat-drawer #drawer class="example-sidenav" mode="side" style=" width: 137px">
-    <button *ngFor="let item of operations.AccessibleEntities;" mat-menu-item (click)="navigate(item)">{{item}}</button>
+    <button *ngFor="let item of accessibleEntities;" mat-menu-item (click)="navigate(item)">{{item}}</button>
     <button mat-menu-item (click)="navigate('item')">item</button>
   </mat-drawer>
 
