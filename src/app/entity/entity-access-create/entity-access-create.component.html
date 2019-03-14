@@ -1,0 +1,45 @@
+<span class="example-spacer"></span>
+<form [formGroup]="formMainGroup" (ngSubmit)="onSubmit()">
+  <div class="example-container">
+      <mat-tab-group>
+          <mat-tab label="General"> 
+              <table>
+                  <tr>
+                    <td>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Select entity</mat-label>
+                        <input  [matAutocomplete]="auto" formControlName="entity_code" matInput placeholder="entity code">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let entity of filteredEntities | async" [value]="entity.entity_code">
+                              <span>{{entity.entity_code}}</span> 
+                            </mat-option>
+                          </mat-autocomplete>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Enter entity access code</mat-label>
+                        <input formControlName="entity_access_code" matInput placeholder="entity access code">
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <mat-checkbox class="example-margin" formControlName="entity_access_active">Active</mat-checkbox>
+                    </td>
+                  </tr>
+                </table>
+             </mat-tab>
+          <mat-tab label="Handler"> 
+              <mat-form-field>
+                  <mat-label>Enter handler code</mat-label>
+                  <textarea formControlName="entity_access_js" matInput placeholder="entity handler js code"></textarea>            
+                </mat-form-field>
+               </mat-tab>
+        </mat-tab-group>
+  </div>
+  <button>Submit</button>
+</form>
+<span class="example-spacer"></span>

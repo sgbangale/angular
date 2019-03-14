@@ -1,7 +1,13 @@
 <mat-toolbar role="toolbar" color="blue">
     <mat-toolbar-row>
       <span>Operations</span>
-      <button *ngFor="let item of operations;" mat-menu-item>{{item.entity_access_code}}</button>
+      <span class="example-spacer"></span>
+      <mat-chip-list>
+
+  <mat-chip *ngFor="let item of operations;" selected color="primary">{{item.entity_access_code}}</mat-chip>
+  
+</mat-chip-list>
+      <!-- <button *ngFor="let item of operations;" mat-menu-item>{{item.entity_access_code}}</button> -->
       <!-- <button mat-icon-button>
         <mat-icon >more_vert</mat-icon>
       </button> -->

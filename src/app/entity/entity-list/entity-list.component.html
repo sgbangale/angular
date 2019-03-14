@@ -1,11 +1,7 @@
 <div style="padding: 15px;margin: 15px;">
   <app-secondary-menu ></app-secondary-menu>
 <br/>
-<!-- <mat-form-field>
-    <select matNativeControl [(ngModel)]="selectedFilter" placeholder="Filter">
-        <option *ngFor="let item of actualColumns" value="item">{{item}}</option>
-      </select>
-    </mat-form-field> -->
+
   <mat-form-field>
     <input matInput [formControl]="filter" >
   </mat-form-field>

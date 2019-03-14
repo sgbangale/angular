@@ -49,7 +49,6 @@ import {
 import { LoginComponent } from './shared/login/login.component';
 import { HomeComponent } from './shared/home/home.component';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { FormcontrolComponent } from './shared/forms/formcontrol/formcontrol.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppSettingsModule } from './app-settings/app-settings.module';
 import { ApiInterceptor } from './shared/ApiInterceptor';
@@ -60,6 +59,8 @@ import { EntityListComponent } from './entity/entity-list/entity-list.component'
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { SecondaryMenuComponent } from './shared/secondary-menu/secondary-menu.component';
 import { EntityDetailsComponent } from './entity/entity-details/entity-details.component';
+import { EntityAccessCreateComponent } from './entity/entity-access-create/entity-access-create.component';
+import { EntityCreateComponent } from './entity/entity-create/entity-create.component';
 
 
 
@@ -73,14 +74,15 @@ export const httpInterceptorProviders = [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    FormcontrolComponent,
     NotFoundComponent,
     SignOutComponent,
     PrimaryMenuComponent,
     EntityListComponent,
     DashboardComponent,
     SecondaryMenuComponent,
-    EntityDetailsComponent
+    EntityDetailsComponent,
+    EntityAccessCreateComponent,
+    EntityCreateComponent
     
     
   ],

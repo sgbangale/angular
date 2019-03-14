@@ -16,6 +16,8 @@ import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { SignOutComponent } from './shared/sign-out/sign-out.component';
 import { EntityListComponent } from './entity/entity-list/entity-list.component';
 import { DashboardComponent } from './shared/dashboard/dashboard.component';
+import { EntityAccessCreateComponent } from './entity/entity-access-create/entity-access-create.component';
+import { EntityCreateComponent } from './entity/entity-create/entity-create.component';
 
 
 const routes: Routes = [{
@@ -31,9 +33,14 @@ const routes: Routes = [{
       { path:'',component:DashboardComponent},
       { path:'dashboard',component:DashboardComponent},
       { path:'entities/:entity_code',component:EntityListComponent},
-      { path:'not-found',component:NotFoundComponent},
+      // { path:'not-found',component:NotFoundComponent},
+      { path:'not-found',component:EntityCreateComponent/*EntityAccessCreateComponent*/},
       { path:'**',component:NotFoundComponent},
     ]
+  }, 
+  {
+    component: EntityAccessCreateComponent,
+    path: 'demo'
   },
   {
     component: LoginComponent,

@@ -1,0 +1,65 @@
+<div class="container">
+   <div class="row">
+     <div class="col s3"></div>
+     <div class="col s6">
+        <form [formGroup]="formMainGroup" (ngSubmit)="onSubmit()">
+            <mat-tab-group>
+                <mat-tab label="General"> 
+            <table>
+              <tr>
+                <td>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter entity code</mat-label>
+                        <input formControlName="entity_code" matInput placeholder="entity code">
+                      </mat-form-field>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter entity name</mat-label>
+                        <input formControlName="entity_name" matInput placeholder="entity name">
+                      </mat-form-field>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter entity access code</mat-label>
+                        <input formControlName="entity_access" matInput placeholder="entity access code">
+                      </mat-form-field>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <mat-checkbox class="example-margin" formControlName="entity_active">Active</mat-checkbox>
+                </td>
+              </tr>
+            </table>
+            </mat-tab>
+            <mat-tab label="Field Details">
+
+                <input type="button" (click)="addAttribute()" mat-raised-button color="accent" value="Add Field" />
+                <div formArrayName="entity_schema" *ngFor="let field of formMainGroup.get('entity_schema').controls; let i=index">
+                    <div [formGroupName]="i">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Enter field code</mat-label>
+                            <input formControlName="field_code" matInput placeholder="field access code">
+                          </mat-form-field>
+                          <mat-form-field appearance="outline">
+                              <mat-label>Enter field type</mat-label>
+                              <input formControlName="field_type" matInput placeholder="field type">
+                            </mat-form-field>
+                            <mat-checkbox class="example-margin" formControlName="field_required">Active</mat-checkbox>
+                      </div>
+                  </div>
+            </mat-tab>
+            </mat-tab-group>
+            <br/>
+            <button  mat-raised-button color="primary">Submit</button>
+          </form>
+     </div>
+     <div class="col s3"></div>
+   </div>
+</div>
+{{formMainGroup.value | json}}
